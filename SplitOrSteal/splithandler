@@ -1,0 +1,25 @@
+{{$usr := .User}}
+{{$interactionToken := .Interaction.Token}}
+{{$id := str $usr.ID}}
+{{$1:=(dbGet ($gID:=(.Message.ID)) "soscompletion").Value}}
+{{$k:=(dbGet ($gID:=(.Message.ID)) "soswinners").Value}}
+{{$m:= $k.Get "users"}}
+{{$f := $1.Get "users"}}
+
+{{if in $m $usr.ID}}
+{{else}}
+{{sendResponse $interactionToken (complexMessage "content" "You are not part of the game." "ephemeral" true)}}
+{{return}}
+{{end}}
+ 
+
+{{if in $f $usr.ID}}
+{{sendResponse $interactionToken (complexMessage "content" "You have already selected an option." "ephemeral" true)}}
+{{return}}
+{{else}}
+{{$1.Set "users" ($1.users.Append .User.ID)}}
+{{end}}
+{{dbSetExpire $gID "soscompletion" $1 600}}
+{{dbSetExpire (.Message.ID) ($id) "SPLIT" 600}}
+ 
+{{sendResponse $interactionToken (complexMessage "content" "Selection successful!" "ephemeral" true)}}

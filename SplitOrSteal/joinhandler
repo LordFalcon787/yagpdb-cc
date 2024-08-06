@@ -1,0 +1,16 @@
+{{$1 := (dbGet (.Message.ID) "soswinners").Value}}
+{{$2 := $1.Get "users"}}
+{{$interactionToken := .Interaction.Token}}
+{{$usr := .user}}
+ 
+{{if in $2 $usr.ID}}
+{{sendResponse $interactionToken (complexMessage "content" "You have already joined." "ephemeral" true)}}
+{{return}}
+{{else}}
+{{end}}
+ 
+{{$list:=(dbGet ($listID:=(.Message.ID)) "soswinners").Value}}
+{{$listID := .Message.ID}}
+{{$list.Set "users" ($list.users.Append .User.ID)}}
+{{dbSetExpire $listID "soswinners" $g 600}}
+{{sendResponse $interactionToken (complexMessage "content" "Joining successful!" "ephemeral" true)}}

@@ -1,0 +1,12 @@
+{{$usr := .User}}
+{{$gID := .Message.ID}}
+{{$descp := "You have 1 minute to join the Split or Steal by clicking the button below. \n \n Two people will be selected. If both select split, you split the prize - if one steals and the other splits, the person who steals wins all. Selecting nothing means split."}}
+{{ $button := cbutton "label" "JOIN" "custom_id" "buttons-joinsos" }}
+{{$embed:=sendMessageRetID nil (complexMessage "content" "" "buttons" $button "embed" (cembed "title" "Split or Steal" "description" $descp "footer" (sdict "text" "Robbing Central - Made by _lordfalcon_" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=1024&format=webp&width=0&height=512") "thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/994010029218877572.gif" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=4096")))}}
+{{$gID := $embed}}
+{{dbSetExpire $gID "soshost" (str $usr.ID) 600}}
+{{$cID := .Channel.ID}}
+{{dbSetExpire $gID "soswinners" (sdict "users" cslice) 600}}
+{{deleteTrigger 2}}
+{{sleep 60}}
+{{execCC $yourCCID nil 1 $gID}} {{/* Replace $yourCCID with the CC number/ID for the secondary handler */}}
