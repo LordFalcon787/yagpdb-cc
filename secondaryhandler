@@ -1,0 +1,43 @@
+{{$gID := .ExecData}}
+{{$host := (dbGet $gID "soshost").Value}} 
+{{$embed := $gID}}
+{{$winners := cslice}}
+{{$1 := (dbGet $gID "soswinners").Value}} 
+{{$2 := $1.Get "users"}}
+{{$3 := len $2}}
+{{$winCount := 2}}
+{{while gt $winCount 0}}
+{{- $winner:=$3|randInt|index $2 -}}
+{{- if in $winners $winner}}{{- continue}}{{- end}}
+{{- $winners =$winners.Append $winner}}
+{{- $winCount =sub $winCount 1}}
+{{end}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$6 := (printf "<@%v> <@%v>" $4 $5)}}
+{{$steal := cbutton "label" "Steal" "custom_id" "buttons-steal"}}
+{{$split := cbutton "label" "Split" "custom_id" "buttons-split"}}
+{{dbSetExpire ($gID) ($4) "NOTHING" 600}}
+{{dbSetExpire ($gID) ($5) "NOTHING" 600}}
+{{$descp := "You have 60 seconds to decide whether to **steal** or **split**. \n \n Two people will be selected. If both select split, you split the prize - if one steals and the other splits, the person who steals wins all. Selecting nothing means split."}}
+{{dbSetExpire $gID "soscompletion" (sdict "users" cslice) 600}}
+{{editMessage nil $embed (complexMessageEdit "content" $6 "buttons" (cslice $split $steal) "embed" (cembed "title" "Split or Steal" "description" $descp "footer" (sdict 
+		"text" "Robbing Central - Made by _lordfalcon_" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=1024&format=webp&width=0&height=512") "thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/994010029218877572.gif" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=4096")))}}
+{{/* You can alter image links and footers to match your server(s) */}}
+{{$12:=execAdmin (printf "giverole %v 1266257227715448893 1m" $4)}} {{/* Change the role ID to the role to give to the two selected players so they can talk. */}}
+{{$13:=execAdmin (printf "giverole %v 1266257227715448893 1m" $5)}} {{/* Change the role ID to the role to give to the two selected players so they can talk. */}}
+{{$pingmsg:=sendMessageRetID nil $6}}
+{{deleteMessage nil $pingmsg}}
+{{sleep 60}}
+ 
+{{$winner1choice := (dbGet $gID $4).Value}}
+{{$winner2choice := (dbGet $gID $5).Value}}
+{{$787 := str $winner1choice}}
+{{$350 := str $winner2choice}}
+{{$descp := (printf "**RESULTS:** \n \n- <@%v> chose **%v** \n- <@%v> chose **%v**" $4 $787 $5 $350)}}
+{{editMessage nil $embed (complexMessageEdit "content" $6 "embed" (cembed "title" "Split or Steal" "description" $descp "footer" (sdict 
+		"text" "Robbing Central - Made by _lordfalcon_" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=1024&format=webp&width=0&height=512") "thumbnail" (sdict "url" "https://cdn.discordapp.com/emojis/994010029218877572.gif" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=4096")))}}
+{{/* You can alter image links and footers to match your server(s) */}}
+{{$pingmsg2:=sendMessageRetID nil (printf "<@%v>" $host)}}
+{{deleteMessage nil $pingmsg2}}
+{{$deleted:=dbDelMultiple (sdict "userID" $gID) 100 0}}
