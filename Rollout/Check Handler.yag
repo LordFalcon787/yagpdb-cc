@@ -1,0 +1,168 @@
+{{/* Trigger: None */}}
+{{/* YAGPDB PREMIUM IS NEEDED */}}
+{{/* Made by _lordfalcon_ */}}
+{{/* Make sure to read comments below and alter anything if needed */}}
+
+{{$gID := .ExecData}}
+{{$1 := (dbGet $gID "rollouteliminated").Value}}
+{{$2 := (dbGet $gID "rolloutchosen").Value}}
+{{$3 := (dbGet 808878244609654784 "rolloutparticipants").Value}}
+{{$4 := "novalue"}}
+{{$lencheck := len $1}}
+{{$p1 := index $3 0}}
+{{$8 := (dbGet 808878244609654784 $p1).Value}}
+{{$str8 := str $8}}
+{{$10 := "eliminated"}}
+{{$6 := ""}}
+ 
+ 
+ 
+{{if ge (len $3) 2}}
+	{{$p2 := index $3 1}}
+	{{$9 := (dbGet 808878244609654784 $p2).Value}}
+	{{$str9 := str $9}}
+	{{if eq $str9 $10}}
+	{{else}}
+		{{$check2 := (dbGet $gID $p2).Value}}
+		{{$check22 := str $check2}}
+		{{if eq $4 $check22}}
+    	{{$1 = $1.Append $p2}}
+		{{$6 = (dbSet 808878244609654784 $p2 "eliminated")}}
+		{{else if eq $2 $check2}}
+    	{{$1 = $1.Append $p2}}
+		{{$6 = (dbSet 808878244609654784 $p2 "eliminated")}}
+		{{end}}
+	{{end}}
+{{end}}
+ 
+{{if ge (len $3) 3}}
+	{{$p3 := index $3 2}}
+	{{$p3c := (dbGet 808878244609654784 $p3).Value}}
+	{{$strp3c := str $p3c}}
+	{{if eq $strp3c $10}}
+	{{else}}
+		{{$check3 := (dbGet $gID $p3).Value}}
+		{{$check33 := str $check3}}
+		{{if eq $4 $check33}}
+   	 	{{$1 = $1.Append $p3}}
+		{{$6 = (dbSet 808878244609654784 $p3 "eliminated")}}
+		{{else if eq $2 $check3}}
+    	{{$1 = $1.Append $p3}}
+		{{$6 = (dbSet 808878244609654784 $p3 "eliminated")}}
+		{{end}}	
+	{{end}}
+{{end}}
+ 
+{{if ge (len $3) 4}}
+	{{$p4 := index $3 3}}
+	{{$p4c := (dbGet 808878244609654784 $p4).Value}}
+	{{$strp4c := str $p4c}}
+	{{if eq $strp4c $10}}
+	{{else}}
+		{{$check4 := (dbGet $gID $p4).Value}}
+		{{$check44 := str $check4}}
+		{{if eq $4 $check44}}
+   	 	{{$1 = $1.Append $p4}}
+		{{$6 = (dbSet 808878244609654784 $p4 "eliminated")}}
+		{{else if eq $2 $check4}}
+    	{{$1 = $1.Append $p4}}
+		{{$6 = (dbSet 808878244609654784 $p4 "eliminated")}}
+		{{end}}
+	{{end}}
+{{end}}
+ 
+{{if ge (len $3) 5}}
+	{{$p5 := index $3 4}}
+	{{$p5c := (dbGet 808878244609654784 $p5).Value}}
+	{{$strp5c := str $p5c}}
+	{{if eq $strp5c $10}}
+	{{else}}
+		{{$check5 := (dbGet $gID $p5).Value}}
+		{{$check55 := str $check5}}
+		{{if eq $4 $check55}}
+    	{{$1 = $1.Append $p5}}
+		{{$6 = (dbSet 808878244609654784 $p5 "eliminated")}}
+		{{else if eq $2 $check5}}
+    	{{$1 = $1.Append $p5}}
+		{{$6 = (dbSet 808878244609654784 $p5 "eliminated")}}
+		{{end}}
+	{{end}}
+{{end}}
+ 
+ 
+ 
+{{if ge (len $3) 6}}
+	{{$p6 := index $3 5}}
+	{{$p6c := (dbGet 808878244609654784 $p6).Value}}
+	{{$strp6c := str $p6c}}
+	{{if eq $strp6c $10}}
+	{{else}}
+		{{$check6 := (dbGet $gID $p6).Value}}
+		{{$check66 := str $check6}}
+		{{if eq $4 $check66}}
+    	{{$1 = $1.Append $p6}}
+		{{$6 = (dbSet 808878244609654784 $p6 "eliminated")}}
+		{{else if eq $2 $check6}}
+    	{{$1 = $1.Append $p6}}
+		{{$6 = (dbSet 808878244609654784 $p6 "eliminated")}}
+		{{end}}
+	{{end}}
+{{end}}
+ 
+{{if ge (len $3) 7}}
+	{{$p7 := index $3 6}}
+	{{$p7c := (dbGet 808878244609654784 $p7).Value}}
+	{{$strp7c := str $p7c}}
+	{{if eq $strp7c $10}}
+	{{else}}
+		{{$check7 := (dbGet $gID $p7).Value}}
+		{{$check77 := str $check7}}
+		{{if eq $4 $check77}}
+    	{{$1 = $1.Append $p7}}
+		{{$6 = (dbSet 808878244609654784 $p7 "eliminated")}}
+		{{else if eq $2 $check7}}
+   	 	{{$1 = $1.Append $p7}}
+		{{$6 = (dbSet 808878244609654784 $p7 "eliminated")}}
+		{{end}}
+	{{end}}
+{{end}}
+ 
+
+ 
+{{$check1 := (dbGet $gID $p1).Value}}
+{{$check11 := str $check1}}
+ 
+{{if $1}}
+{{else}}
+{{$1 := cslice}}
+{{end}}
+
+{{if eq $str8 $10}}
+	{{if eq $4 $check11}}
+    	{{$1 = $1.Append $p1}}
+		{{$7 := (dbSet 808878244609654784 $p1 "eliminated")}}
+	{{else if eq $2 $check1}}
+   		{{$1 = $1.Append $p1}}
+		{{$7 := (dbSet 808878244609654784 $p1 "eliminated")}}
+	{{end}}
+{{end}}
+
+{{$msg := "No one has been eliminated."}}
+{{$lencheck2 := len $1}}
+{{$5 := (dbSet $gID "rollouteliminated" $1)}}
+ 
+{{if eq $lencheck $lencheck2}}
+{{else}}
+	{{if eq (len $1) 1}}
+	{{$msg = (printf "<@%v> has been eliminated for choosing nothing or **%v**." (index $1 0) $2)}}
+	{{else if eq (len $1) 2}}
+	{{$msg = (printf "<@%v>, and <@%v> have been eliminated for choosing nothing or **%v**." (index $1 0) (index $1 1) $2)}}
+	{{else if eq (len $1) 3}}
+	{{$msg = (printf "<@%v>, <@%v>, and <@%v> have been eliminated for choosing nothing or **%v**." (index $1 0) (index $1 1) (index $1 2) $2)}}
+	{{else if eq (len $1) 4}}
+	{{$msg = (printf "<@%v>, <@%v>, <@%v>, and <@%v> have been eliminated for choosing nothing or **%v**." (index $1 0) (index $1 1) (index $1 2) (index $1 3) $2)}}
+	{{else if eq (len $1) 5}}
+	{{$msg = (printf "<@%v>, <@%v>, <@%v>, <@%v>, and <@%v> have been eliminated for choosing nothing or **%v**." (index $1 0) (index $1 1) (index $1 2) (index $1 3) 		(index $1 4) $2)}}
+	{{end}}
+	{{sendMessage nil $msg}}
+{{end}}

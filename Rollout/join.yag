@@ -1,0 +1,18 @@
+{{/* Trigger: Message Component (joinrollout) */}}
+{{/* YAGPDB PREMIUM IS NEEDED */}}
+{{/* Made by _lordfalcon_ */}}
+{{/* Make sure to read comments below and alter anything if needed */}}
+
+{{$1 := (dbGet 808878244609654784 "rolloutlist").Value}}
+{{$2 := $1.Get "users"}}
+{{$intToken := .Interaction.Token}}
+{{$usr := .User}}
+ 
+{{if in $2 $usr.ID}}
+{{sendResponse $intToken (complexMessage "content" "You have already joined." "ephemeral" true)}}
+{{return}}
+{{end}}
+ 
+{{$1.Set "users" ($1.users.Append $usr.ID)}}
+{{dbSetExpire 808878244609654784 "rolloutlist" $1 1200}}
+{{sendResponse $intToken (complexMessage "content" "Joining successful!" "ephemeral" true)}}

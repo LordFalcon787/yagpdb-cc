@@ -1,0 +1,32 @@
+{{/* Trigger: Message Component */}}
+{{/* YAGPDB PREMIUM IS NEEDED */}}
+{{/* Made by _lordfalcon_ */}}
+{{/* Make sure to read comments below and alter anything if needed */}}
+
+{{/* Make 20 of these, using the pattern of r1, r2, r3, r4, r5, r6, r7, r8, r9, rten, releven, rtwelve, rthirteen, rfourteen, rfifteen, rsixteen, rseventeen, reighttteen, rnineteen, rtwenty */}}
+{{/* ^ Custom RegEx ID trigger */}}
+
+
+{{$gID := .Message.ID}}
+{{$usrID := .User.ID}}
+{{$intToken := .Interaction.Token}}
+{{$1 := (dbGet 808878244609654784 "rolloutparticipants").Value}}
+{{$2 := (dbGet $gID "rolloutnumbers").Value}}
+{{$4 := (dbGet $gID "rollouteliminated").Value}}
+ 
+{{if in $1 $usrID}}
+{{else}}
+{{sendResponse $intToken (complexMessage "content" "You are not part of the game." "ephemeral" true)}}
+{{return}}
+{{end}}
+{{if in $4 $usrID}}
+{{sendResponse $intToken (complexMessage "content" "You have been eliminated, you cannot play." "ephemeral" true)}}
+{{return}}
+{{end}}
+{{if in $2 1}} {{/* Change number corresponding to button */}}
+{{sendResponse $intToken (complexMessage "content" "This number has already been selected." "ephemeral" true)}}
+{{return}}
+{{else}}
+{{$3 := (dbSet $gID $usrID 1)}} {{/* Change number corresponding to button */}}
+{{sendResponse $intToken (complexMessage "content" "Number **1** selected." "ephemeral" true)}} {{/* Change number corresponding to button */}}
+{{end}}

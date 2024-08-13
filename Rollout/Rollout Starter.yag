@@ -1,0 +1,96 @@
+{{/* Trigger: Command (rollout) */}}
+{{/* YAGPDB PREMIUM IS NEEDED */}}
+{{/* Made by _lordfalcon_ */}}
+{{/* Make sure to read comments below and alter anything if needed */}}
+
+
+
+{{$usr := .User}}
+{{$args := parseArgs 2 "Make sure to add the donor and prize. e.g. -rollout @donor 30m."
+    (carg "user" "donor")
+    (carg "string" "prize")}}
+{{$donor := ($args.Get 0).ID}}
+{{$prize := $args.Get 1}}
+{{$descp := (printf "\n > Donor: <@%v> \n > Prize: %v \n\nYou have 1 minute to join the Rolllout game by clicking the button below. \n \n Seven people will be selected to play. There are numbers from 1-20, and you choose one of them. If the bot chooses the same number as you you are eliminated. That chosen number will not be repeated again. __Make sure to stay active, if you do not select a number within the 20 seconds, you will be eliminated__" $donor $prize)}}
+{{ $button := cbutton "label" "JOIN" "custom_id" "buttons-joinrollout" }}
+{{$embed:=sendMessageRetID nil (complexMessage "content" "" "buttons" $button "embed" (cembed "title" "Rollout" "description" $descp "footer" (sdict "text" "Robbing Central - Made by _lordfalcon_" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=1024&format=webp&width=0&height=512") "thumbnail" (sdict "url" "https://i.imgur.com/CTZGCrv.gif" "icon_url" "https://cdn.discordapp.com/icons/1205270486230110330/f746bd8ccde4545818b80133872adc4e.webp?size=4096")))}}
+{{$gID := $embed}}
+{{$23 := (dbSetExpire 808878244609654784 "rolloutlist" (sdict "users" cslice) 1200)}}
+{{$24 := (dbSet $gID "rolloutnumbers" cslice)}}
+{{sleep 60}}
+{{$winners := cslice}}
+{{$1 := (dbGet 808878244609654784 "rolloutlist").Value}}
+{{$2 := $1.Get "users"}}
+{{$3 := len $2}}
+{{$winCount := 7}}
+{{if eq $3 1}}
+{{$winCount = 1}}
+{{sendMessage nil "You cannot play this game with one player."}}
+{{return}}
+{{else if eq $3 2}}
+{{$winCount = 2}}
+{{else if eq $3 3}}
+{{$winCount = 3}}
+{{else if eq $3 4}}
+{{$winCount = 4}}
+{{else if eq $3 5}}
+{{$winCount = 5}}
+{{else if eq $3 6}}
+{{$winCount = 6}}
+{{end}}
+{{while gt $winCount 0}}
+{{- $winner:=$3|randInt|index $2 -}}
+{{- if in $winners $winner}}{{- continue}}{{- end}}
+{{- $winners =$winners.Append $winner}}
+{{- $winCount =sub $winCount 1}}
+{{end}}
+{{$96 := (dbSet 808878244609654784 "rolloutparticipants" $winners)}}
+{{$9 := ""}}
+{{if eq $3 1}}
+{{$4 := index $winners 0}}
+{{$9 = (printf "<@%v>" $4)}}
+{{else if eq $3 2}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$9 = (printf "<@%v> <@%v>" $4 $5)}}
+{{else if eq $3 3}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$6 := index $winners 2}}
+{{$9 = (printf "<@%v> <@%v> <@%v>" $4 $5 $6)}}
+{{else if eq $3 4}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$6 := index $winners 2}}
+{{$7 := index $winners 3}}
+{{$9 = (printf "<@%v> <@%v> <@%v> <@%v>" $4 $5 $6 $7)}}
+{{else if eq $3 5}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$6 := index $winners 2}}
+{{$7 := index $winners 3}}
+{{$8 := index $winners 4}}
+{{$9 = (printf "<@%v> <@%v> <@%v> <@%v> <@%v>" $4 $5 $6 $7 $8)}}
+{{else if eq $3 6}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$6 := index $winners 2}}
+{{$7 := index $winners 3}}
+{{$8 := index $winners 4}}
+{{$ext := index $winners 5}}
+{{$9 = (printf "<@%v> <@%v> <@%v> <@%v> <@%v> <@%v>" $4 $5 $6 $7 $8 $ext)}}
+{{else}}
+{{$4 := index $winners 0}}
+{{$5 := index $winners 1}}
+{{$6 := index $winners 2}}
+{{$7 := index $winners 3}}
+{{$8 := index $winners 4}}
+{{$ext := index $winners 5}}
+{{$ext2 := index $winners 6}}
+{{$9 = (printf "<@%v> <@%v> <@%v> <@%v> <@%v> <@%v> <@%v>" $4 $5 $6 $7 $8 $ext $ext2)}} 
+{{end}}
+{{sendMessage nil $9}}
+ 
+{{$96 := (dbSet $gID "rolloutstatus" "start")}}
+{{$95 := (dbSet $gID "rollouteliminated" cslice)}}
+{{execCC 133 nil 1 $gID}} {{/* Change CC id to the one of the Game Handler */}}
